@@ -1,0 +1,55 @@
+{
+  "name": "moe-mizrak/validator-guard-core",
+  "description": "Core package for ValidatorGuard",
+  "keywords": [
+    "Moe Mizrak",
+    "laravel",
+    "validator-guard-core",
+    "ValidatorGuardCore",
+    "Validation",
+    "Validator",
+    "Attributes",
+    "ValidatorGuard",
+    "Attribute Validation"
+  ],
+  "type": "package",
+  "homepage": "https://github.com/moe-mizrak/validator-guard-core",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Moe Mizrak"
+    }
+  ],
+  "require": {
+    "php": "^8.2",
+    "laravel/pint": "^1.18",
+    "spatie/laravel-data": "^4.11"
+  },
+  "require-dev": {
+    "orchestra/testbench": "^9.6.1",
+    "phpunit/phpunit": "^11.4",
+    "fakerphp/faker": "^1.24.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "MoeMizrak\\ValidatorGuardCore\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "MoeMizrak\\ValidatorGuardCore\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "MoeMizrak\\ValidatorGuardCore\\ValidatorGuardCoreServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
