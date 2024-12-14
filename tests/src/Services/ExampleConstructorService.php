@@ -9,9 +9,7 @@ use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
  */
 class ExampleConstructorService
 {
-    public function __construct(protected int $intValue, protected string $stringValue)
-    {
-    }
+    public function __construct(protected int $intValue, protected string $stringValue) {}
 
     #[Comparison(200, '>')]
     public function comparisonSucceedMethod(int $param): int

@@ -15,11 +15,11 @@ class ValidatorGuardCoreTest extends TestCase
 {
     private ExampleService $example;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->example = new ExampleService();
+        $this->example = new ExampleService;
     }
 
     #[Test]
@@ -72,7 +72,7 @@ class ValidatorGuardCoreTest extends TestCase
         $result = $validationGuardCore->nonPastDateMethod($param, $dateParam);
 
         /* ASSERT */
-        $this->assertEquals($result, $param . ' / ' . $dateParam);
+        $this->assertEquals($result, $param.' / '.$dateParam);
     }
 
     #[Test]
@@ -165,7 +165,7 @@ class ValidatorGuardCoreTest extends TestCase
     public function it_tests_failure_binding_classes_through_when_NOT_dependency_resolved_from_service_container()
     {
         /* EXECUTE */
-        $exampleForBindingService = new ExampleForBindingService();
+        $exampleForBindingService = new ExampleForBindingService;
 
         /* ASSERT */
         $this->assertInstanceOf(ExampleForBindingService::class, $exampleForBindingService);

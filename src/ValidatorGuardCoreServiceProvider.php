@@ -11,8 +11,6 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
     public function boot(): void
     {
@@ -21,8 +19,6 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
     public function register(): void
     {
@@ -38,8 +34,6 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 
     /**
      * Get the services provided by the provider.
-     *
-     * @return array
      */
     public function provides(): array
     {
@@ -48,14 +42,12 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 
     /**
      * Setup the configuration.
-     *
-     * @return void
      */
     protected function configure(): void
     {
         // Get the config path based on environment
         $configPath = app()->environment('testing')
-            ? __DIR__ . '/../tests/config/validator-guard-core.php'
+            ? __DIR__.'/../tests/config/validator-guard-core.php'
             : config_path('validator-guard-core.php');
 
         // Merge configuration
@@ -68,22 +60,18 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 
     /**
      * Register the package's publishable resources.
-     *
-     * @return void
      */
     protected function registerPublishing(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__ . '/../config/validator-guard-core.php' => config_path('validator-guard-core.php'),
+                __DIR__.'/../config/validator-guard-core.php' => config_path('validator-guard-core.php'),
             ], 'validator-guard-core');
         }
     }
 
     /**
      * Loop through class_list in config and bind them to ValidatorGuardCore
-     *
-     * @return void
      */
     private function bindClasses(): void
     {
@@ -102,12 +90,10 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
 
     /**
      * Load helper methods to service provider.
-     *
-     * @return void
      */
     private function loadHelpers(): void
     {
-        $helperFile = __DIR__ . '/Helpers/helpers.php';
+        $helperFile = __DIR__.'/Helpers/helpers.php';
         if (file_exists($helperFile)) {
             require_once $helperFile;
         }

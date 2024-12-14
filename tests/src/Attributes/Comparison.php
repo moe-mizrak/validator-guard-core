@@ -21,20 +21,15 @@ class Comparison implements ValidationAttributeInterface
         }
     }
 
-    /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
-     */
     public function handle(MethodContextData $methodContextData): bool
     {
         return match ($this->operator) {
-            '<'     => $this->value < $methodContextData->methodResponse,
-            '<='    => $this->value <= $methodContextData->methodResponse,
-            '=='    => $this->value == $methodContextData->methodResponse,
-            '>'     => $this->value > $methodContextData->methodResponse,
-            '>='    => $this->value >= $methodContextData->methodResponse,
-            '!='    => $this->value != $methodContextData->methodResponse,
+            '<' => $this->value < $methodContextData->methodResponse,
+            '<=' => $this->value <= $methodContextData->methodResponse,
+            '==' => $this->value == $methodContextData->methodResponse,
+            '>' => $this->value > $methodContextData->methodResponse,
+            '>=' => $this->value >= $methodContextData->methodResponse,
+            '!=' => $this->value != $methodContextData->methodResponse,
             default => false,
         };
     }

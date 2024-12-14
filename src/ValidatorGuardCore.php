@@ -21,10 +21,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
      * This magic method triggered when a non-existed method is called.
      * And here we check wrapped original class methods and validate them based on the attributes assigned to them.
      *
-     * @param string $_methodName
-     * @param array $_params
      *
-     * @return mixed
      * @throws ValidatorGuardCoreException
      * @throws \ReflectionException
      */
@@ -43,7 +40,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
         $after = 'after'; // After method execution key
 
         // If method attributes have after key which is not empty, then execute method
-        if (Arr::has($_attributeMethodPairs, $after) && ! empty($_attributeMethodPairs[$after])){
+        if (Arr::has($_attributeMethodPairs, $after) && ! empty($_attributeMethodPairs[$after])) {
             // Call the original method and store the response
             $_methodResponse = $this->_callOriginalFunction($_methodName, ...$_params);
             // set isCalled to true in order to prevent calling it twice.
@@ -62,11 +59,6 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
 
     /**
      * Call the original method on the class
-     *
-     * @param string $_methodName
-     * @param ...$_params
-     *
-     * @return mixed
      */
     private function _callOriginalFunction(string $_methodName, ...$_params): mixed
     {
@@ -76,11 +68,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
     /**
      * Validate method attributes by invoking handle.
      *
-     * @param array $_attributeMethodPairs
-     * @param string $_methodName
-     * @param MethodContextData $_methodContextData
      *
-     * @return void
      * @throws ValidatorGuardCoreException
      * @throws \ReflectionException
      */
@@ -100,14 +88,10 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
     /**
      * Invoke the handle method for the attribute.
      *
-     * @param ReflectionAttribute|null $_attribute
-     * @param MethodContextData $_methodContextData
      *
-     * @return mixed
      * @throws ValidatorGuardCoreException
      * @throws \ReflectionException
      */
-
     private function _invokeHandle(?ReflectionAttribute $_attribute, MethodContextData $_methodContextData): mixed
     {
         $_handleMethodName = 'handle';
@@ -131,10 +115,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
     /**
      * Retrieve the attributes assigned to the method
      *
-     * @param object $_class
-     * @param string $_methodName
      *
-     * @return array
      * @throws \ReflectionException
      */
     private function _retrieveAttributeMethodPairs(object $_class, string $_methodName): array

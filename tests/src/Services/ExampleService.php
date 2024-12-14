@@ -2,8 +2,8 @@
 
 namespace MoeMizrak\ValidatorGuardCore\Tests\src\Services;
 
-use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Callback;
+use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\NonPastDate;
 
 /**
@@ -26,7 +26,7 @@ class ExampleService
     #[NonPastDate]
     public function nonPastDateMethod(int $param, string $dateParam): string
     {
-        return $param . ' / ' . $dateParam;
+        return $param.' / '.$dateParam;
     }
 
     #[Callback(className: ExampleService::class, methodName: 'callbackMethod', params: [33])]

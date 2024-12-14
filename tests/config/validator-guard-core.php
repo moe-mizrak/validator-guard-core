@@ -17,7 +17,7 @@ return [
         ],
         'after' => [
             Comparison::class,
-        ]
+        ],
     ],
     /**
      * Here we add all classes that we use attributes validation in order to bind them to ValidatorGuardCore in Service Provider.
@@ -25,6 +25,6 @@ return [
      */
     'class_list' => [
         ExampleService::class,
-        ExampleForBindingService::class
-    ]
+        ExampleForBindingService::class,
+    ],
 ];

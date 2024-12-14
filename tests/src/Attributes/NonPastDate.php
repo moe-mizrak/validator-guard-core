@@ -12,11 +12,6 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 #[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class NonPastDate implements ValidationAttributeInterface
 {
-    /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
-     */
     public function handle(MethodContextData $methodContextData): bool
     {
         // Date param passed to the method as second parameter

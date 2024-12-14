@@ -14,7 +14,6 @@ interface ValidationAttributeInterface
     /**
      * Handles the validation logic for attributes.
      *
-     * @param MethodContextData $methodContextData
      *
      * @return bool - Returns true if the validation passes, false otherwise.
      */

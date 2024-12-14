@@ -16,13 +16,9 @@ class Callback implements ValidationAttributeInterface
         public string $className,
         public string $methodName,
         public array $params
-    ) {
-    }
+    ) {}
 
     /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
      * @throws \ReflectionException
      */
     public function handle(MethodContextData $methodContextData): bool
@@ -34,7 +30,7 @@ class Callback implements ValidationAttributeInterface
         // Get a reflection method instance
         $method = $class->getMethod($this->methodName);
         // Call the method with the provided parameters
-        $result =  $method->invoke($instance, $this->params[0]);
+        $result = $method->invoke($instance, $this->params[0]);
 
         return $result > 100;
     }
