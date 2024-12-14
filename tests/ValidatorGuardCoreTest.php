@@ -4,6 +4,7 @@ namespace MoeMizrak\ValidatorGuardCore\Tests;
 
 use BadMethodCallException;
 use MoeMizrak\ValidatorGuardCore\Exceptions\ValidatorGuardCoreException;
+use MoeMizrak\ValidatorGuardCore\Tests\src\Services\ExampleConstructorService;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Services\ExampleForBindingService;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Services\ExampleService;
 use MoeMizrak\ValidatorGuardCore\ValidatorGuardCore;
@@ -169,5 +170,38 @@ class ValidatorGuardCoreTest extends TestCase
         /* ASSERT */
         $this->assertInstanceOf(ExampleForBindingService::class, $exampleForBindingService);
         $this->assertNotInstanceOf(ValidatorGuardCore::class, $exampleForBindingService);
+    }
+
+    #[Test]
+    public function it_tests_manuel_resolve_class_where_it_requires_constructor_params()
+    {
+        /* SETUP */
+        $intValue = 11;
+        $stringValue = 'my string value';
+        $exampleConstructorService = new ExampleConstructorService($intValue, $stringValue);
+        $validationGuardCore = new ValidatorGuardCore($exampleConstructorService);
+
+        /* EXECUTE */
+        $result = $validationGuardCore->comparisonSucceedMethod(20);
+
+        /* ASSERT */
+        $this->assertEquals($result, 20);
+    }
+
+    #[Test]
+    public function it_tests_helper_valguard()
+    {
+        /* SETUP */
+        $intValue = 11;
+        $stringValue = 'my string value';
+        $exampleConstructorService = new ExampleConstructorService($intValue, $stringValue);
+        $validationGuardCore = valguard($exampleConstructorService);
+
+        /* EXECUTE */
+
+        $result = $validationGuardCore->comparisonSucceedMethod(20);
+
+        /* ASSERT */
+        $this->assertEquals($result, 20);
     }
 }

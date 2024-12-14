@@ -26,9 +26,14 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        // Setup config based on environment
         $this->configure();
 
+        // Bind classes in config to service provider
         $this->bindClasses();
+
+        // Load helpers.
+        $this->loadHelpers();
     }
 
     /**
@@ -92,6 +97,19 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
                     new $class
                 );
             });
+        }
+    }
+
+    /**
+     * Load helper methods to service provider.
+     *
+     * @return void
+     */
+    private function loadHelpers(): void
+    {
+        $helperFile = __DIR__ . '/Helpers/helpers.php';
+        if (file_exists($helperFile)) {
+            require_once $helperFile;
         }
     }
 }
