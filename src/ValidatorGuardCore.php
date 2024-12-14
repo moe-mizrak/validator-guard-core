@@ -14,7 +14,7 @@ use ReflectionClass;
  *
  * Class ValidatorGuardCore
  */
-class ValidatorGuardCore extends ValidatorGuardCoreAPI
+final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
 {
     /**
      * Dynamically handle method calls.
@@ -28,7 +28,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
      * @throws ValidatorGuardCoreException
      * @throws \ReflectionException
      */
-    public function __call(string $_methodName, array $_params): mixed
+    final public function __call(string $_methodName, array $_params): mixed
     {
         // Check if the method exists in the original service and call it
         if (! method_exists($this->_class, $_methodName)) {
@@ -40,10 +40,9 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
 
         $_methodResponse = null;
         $_isCalled = false;
-        $after = 'after'; // After method execution key
 
         // If method attributes have after key which is not empty, then execute method
-        if (Arr::has($_attributeMethodPairs, $after) && ! empty($_attributeMethodPairs[$after])){
+        if (Arr::has($_attributeMethodPairs, self::_AFTER) && ! empty($_attributeMethodPairs[self::_AFTER])){
             // Call the original method and store the response
             $_methodResponse = $this->_callOriginalFunction($_methodName, ...$_params);
             // set isCalled to true in order to prevent calling it twice.
@@ -110,7 +109,7 @@ class ValidatorGuardCore extends ValidatorGuardCoreAPI
 
     private function _invokeHandle(?ReflectionAttribute $_attribute, MethodContextData $_methodContextData): mixed
     {
-        $_handleMethodName = 'handle';
+        $_handleMethodName = self::_HANDLE_METHOD_NAME;
         $_attributeInstance = $_attribute->newInstance();
 
         $_reflectionClass = new ReflectionClass($_attributeInstance);
