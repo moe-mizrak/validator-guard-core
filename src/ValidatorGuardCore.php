@@ -4,8 +4,12 @@ namespace MoeMizrak\ValidatorGuardCore;
 
 use BadMethodCallException;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Log;
 use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 use MoeMizrak\ValidatorGuardCore\Exceptions\ValidatorGuardCoreException;
+use Monolog\Handler\StreamHandler;
+use Monolog\Level;
+use Monolog\Logger;
 use ReflectionAttribute;
 use ReflectionClass;
 
@@ -44,7 +48,7 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
         // If method attributes have after key which is not empty, then execute method
         if (Arr::has($_attributeMethodPairs, self::_AFTER) && ! empty($_attributeMethodPairs[self::_AFTER])){
             // Call the original method and store the response
-            $_methodResponse = $this->_callOriginalFunction($_methodName, ...$_params);
+            $_methodResponse = $this->_callOriginalMethod($_methodName, ...$_params);
             // set isCalled to true in order to prevent calling it twice.
             $_isCalled = true;
         }
@@ -56,7 +60,7 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
 
         $this->_validate($_attributeMethodPairs, $_methodName, $_methodContextData);
 
-        return $_isCalled ? $_methodResponse : $this->_callOriginalFunction($_methodName, ...$_params);
+        return $_isCalled ? $_methodResponse : $this->_callOriginalMethod($_methodName, ...$_params);
     }
 
     /**
@@ -67,7 +71,7 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
      *
      * @return mixed
      */
-    private function _callOriginalFunction(string $_methodName, ...$_params): mixed
+    private function _callOriginalMethod(string $_methodName, ...$_params): mixed
     {
         return $this->_class->{$_methodName}(...$_params);
     }
@@ -89,9 +93,12 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
         $_flattenedMethodPairs = Arr::flatten($_attributeMethodPairs);
 
         foreach ($_flattenedMethodPairs as $_attribute) {
-            // Invoke the handle method of the attribute class, if fails throw descriptive exception
+            // Invoke the handle method of the attribute class, if fails throw/log descriptive exception
             if (! $this->_invokeHandle($_attribute, $_methodContextData)) {
-                throw new ValidatorGuardCoreException("{$_attribute} handle method failed for the {$_methodName}");
+                // Message that will be thrown and/or logged
+                $message = "{$_attribute} handle method failed for the {$_methodName}";
+                // Throw the exception if enabled and/or log it if enabled
+                $this->_handleValidationFailure($message);
             }
         }
     }
@@ -111,20 +118,21 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
     {
         $_handleMethodName = self::_HANDLE_METHOD_NAME;
         $_attributeInstance = $_attribute->newInstance();
-
         $_reflectionClass = new ReflectionClass($_attributeInstance);
 
         // Ensure the attribute has a handle method
-        if ($_reflectionClass->hasMethod($_handleMethodName)) {
-            // get the handle method of the attribute class from the reflection
-            $_handle = $_reflectionClass->getMethod($_handleMethodName);
-
-            // we make the call with attribute instance, not with reflection class instance
-            return $_handle->invoke($_attributeInstance, $_methodContextData);
+        if (! $_reflectionClass->hasMethod($_handleMethodName)) {
+            // Message that will be thrown and/or logged
+            $message = "Attribute {$_attribute} does not exist or missing {$_handleMethodName} method !";
+            // Throw the exception if enabled and/or log it if enabled
+            $this->_handleValidationFailure($message);
         }
 
-        // Throw exception if the handle method is missing
-        throw new ValidatorGuardCoreException("Attribute {$_attribute} does not exist or missing {$_handleMethodName} method !");
+        // get the handle method of the attribute class from the reflection
+        $_handle = $_reflectionClass->getMethod($_handleMethodName);
+
+        // we make the call with attribute instance, not with reflection class instance
+        return $_handle->invoke($_attributeInstance, $_methodContextData);
     }
 
     /**
@@ -164,5 +172,40 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
         }
 
         return $_attributes;
+    }
+
+    /**
+     * Handle the failure by throwing exceptions and/or logging the validation message.
+     *
+     * @param string $message
+     *
+     * @return void
+     * @throws ValidatorGuardCoreException
+     */
+    private function _handleValidationFailure(string $message): void
+    {
+        /*
+         * Handle logging exceptions related conditions
+         */
+        if (config('validator-guard-core.log_exceptions', false)) {
+            if (app()->environment('testing')) {
+                $packageLogPath = __DIR__ . '/../tests/storage/logs/laravel.log';
+                $logger = new Logger('validator-guard-core');
+                $logger->pushHandler(new StreamHandler($packageLogPath, Level::Error));
+                // Log exception message
+                $logger->error($message);
+            } else {
+                // Get the configured channel for logging
+                $channel = config('validator-guard-core.log_channel', 'stack'); // Fallback to 'stack' channel
+                Log::channel($channel)->error($message);
+            }
+        }
+
+        /*
+         * Handle throwing exceptions related conditions
+         */
+        if (config('validator-guard-core.throw_exceptions', true)) {
+            throw new ValidatorGuardCoreException($message);
+        }
     }
 }
