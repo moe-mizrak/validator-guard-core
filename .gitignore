@@ -5,3 +5,4 @@
 .env.testing
 .phpunit.result.cache
 .DS_Store
+/tests/storage/logs/

@@ -198,10 +198,46 @@ class ValidatorGuardCoreTest extends TestCase
         $validationGuardCore = valguard($exampleConstructorService);
 
         /* EXECUTE */
-
         $result = $validationGuardCore->comparisonSucceedMethod(20);
 
         /* ASSERT */
         $this->assertEquals($result, 20);
+    }
+
+    #[Test]
+    public function it_does_NOT_throw_exception_when_config_option_throw_exception_disabled()
+    {
+        /* SETUP */
+        $param = 2;
+        $dateParam = '2014-12-12 15:00:00';
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+        config(['validator-guard-core.log_exceptions' => false]);
+        config(['validator-guard-core.throw_exceptions' => false]);
+
+        /* EXECUTE */
+        $result = $validationGuardCore->nonPastDateMethod($param, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $param . ' / ' . $dateParam);
+    }
+
+    #[Test]
+    public function it_tests_when_throw_exception_disabled_and_when_log_exceptions_enabled()
+    {
+        /* SETUP */
+        $param = 2;
+        $dateParam = '2014-12-12 15:00:00';
+        $filePath  = __DIR__ . '/storage/logs/laravel.log';;
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+        config(['validator-guard-core.log_exceptions' => true]);
+        config(['validator-guard-core.throw_exceptions' => false]);
+
+        /* EXECUTE */
+        $result = $validationGuardCore->nonPastDateMethod($param, $dateParam);
+
+        /* ASSERT */
+        $this->assertEquals($result, $param . ' / ' . $dateParam);
+        $this->assertGreaterThan(0, filesize($filePath));
+        file_put_contents($filePath, ''); // clear log file after assertion
     }
 }
