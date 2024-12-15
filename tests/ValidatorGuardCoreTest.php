@@ -227,7 +227,7 @@ class ValidatorGuardCoreTest extends TestCase
         /* SETUP */
         $param = 2;
         $dateParam = '2014-12-12 15:00:00';
-        $filePath  = __DIR__ . '/storage/logs/laravel.log';;
+        $filePath  = storage_path('logs/laravel.log');;
         $validationGuardCore = new ValidatorGuardCore($this->example);
         config(['validator-guard-core.log_exceptions' => true]);
         config(['validator-guard-core.throw_exceptions' => false]);

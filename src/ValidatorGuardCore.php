@@ -188,22 +188,7 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
          * Handle logging exceptions related conditions
          */
         if (config('validator-guard-core.log_exceptions', false)) {
-            if (app()->environment('testing')) {
-                $packageLogPath = getcwd() . '/tests/storage/logs/laravel.log';
-                // Ensure the logs directory exists
-                $logDir = dirname($packageLogPath);
-                if (!is_dir($logDir)) {
-                    mkdir($logDir, 0777, true);  // Create the directory and set permissions
-                }
-                $logger = new Logger('validator-guard-core');
-                $logger->pushHandler(new StreamHandler($packageLogPath, Level::Error));
-                // Log exception message
-                $logger->error($message);
-            } else {
-                // Get the configured channel for logging
-                $channel = config('validator-guard-core.log_channel', 'stack'); // Fallback to 'stack' channel
-                Log::channel($channel)->error($message);
-            }
+            $this->_logException($message);
         }
 
         /*
@@ -211,6 +196,37 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
          */
         if (config('validator-guard-core.throw_exceptions', true)) {
             throw new ValidatorGuardCoreException($message);
+        }
+    }
+
+    /**
+     * Log exception considering the environment.
+     *
+     * @param $message
+     *
+     * @return void
+     */
+    private function _logException($message): void
+    {
+        if (app()->environment('testing')) {
+            $packageLogPath = storage_path('logs/laravel.log');
+            // Ensure the logs directory exists
+            $logDir = dirname($packageLogPath);
+            // Create the directory and set permissions
+            if (! is_dir($logDir)) {
+                mkdir($logDir, 0777, true);
+            }
+            // Create Monolog/Logger with a simple descriptive name
+            $logger = new Logger('validator-guard-core');
+            // Push the error handler to the logger
+            $logger->pushHandler(new StreamHandler($packageLogPath, Level::Error));
+            // Log exception message
+            $logger->error($message);
+        } else {
+            // Get the configured channel for logging
+            $channel = config('validator-guard-core.log_channel', 'stack'); // Fallback to 'stack' channel
+            // Log exception message using Laravel Log facade if it exists
+            Log::channel($channel)->error($message);
         }
     }
 }
