@@ -189,7 +189,12 @@ final readonly class ValidatorGuardCore extends ValidatorGuardCoreAPI
          */
         if (config('validator-guard-core.log_exceptions', false)) {
             if (app()->environment('testing')) {
-                $packageLogPath = __DIR__ . '/../tests/storage/logs/laravel.log';
+                $packageLogPath = getcwd() . '/tests/storage/logs/laravel.log';
+                // Ensure the logs directory exists
+                $logDir = dirname($packageLogPath);
+                if (!is_dir($logDir)) {
+                    mkdir($logDir, 0777, true);  // Create the directory and set permissions
+                }
                 $logger = new Logger('validator-guard-core');
                 $logger->pushHandler(new StreamHandler($packageLogPath, Level::Error));
                 // Log exception message
