@@ -7,8 +7,10 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 
 /**
  * Comparison attribute for comparing the result of a method with a numerical value
+ *
+ * @attribute Comparison
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Comparison implements ValidationAttributeInterface
 {
     public function __construct(
@@ -22,19 +24,17 @@ class Comparison implements ValidationAttributeInterface
     }
 
     /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function handle(MethodContextData $methodContextData): bool
     {
         return match ($this->operator) {
-            '<'     => $this->value < $methodContextData->methodResponse,
-            '<='    => $this->value <= $methodContextData->methodResponse,
-            '=='    => $this->value == $methodContextData->methodResponse,
-            '>'     => $this->value > $methodContextData->methodResponse,
-            '>='    => $this->value >= $methodContextData->methodResponse,
-            '!='    => $this->value != $methodContextData->methodResponse,
+            '<'     => $this->value < $methodContextData->methodResult,
+            '<='    => $this->value <= $methodContextData->methodResult,
+            '=='    => $this->value == $methodContextData->methodResult,
+            '>'     => $this->value > $methodContextData->methodResult,
+            '>='    => $this->value >= $methodContextData->methodResult,
+            '!='    => $this->value != $methodContextData->methodResult,
             default => false,
         };
     }

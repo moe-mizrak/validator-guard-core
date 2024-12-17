@@ -2,12 +2,15 @@
 
 namespace MoeMizrak\ValidatorGuardCore\Tests\src\Services;
 
+use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\AllowedValues;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Callback;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\NonPastDate;
 
 /**
  * Example Service for testing different scenarios.
+ *
+ * @class ExampleService
  */
 class ExampleService
 {
@@ -54,8 +57,22 @@ class ExampleService
 
     #[Comparison(20, '<')]
     #[NonPastDate]
-    public function multipleAttributeMethod(int $param, string $dateParam)
+    public function multipleAttributeMethod(int $param, string $dateParam): int
     {
         return $param;
+    }
+
+    public function allowedValuesMethod(
+        #[AllowedValues(['allowedString', 'anotherValue'], 0)] string $stringParam,
+        int $intParam
+    ): int {
+        return $intParam;
+    }
+
+    public function multipleAllowedValuesMethod(
+        #[AllowedValues(['firstAllowedString', 'anotherValue'], 0)] string $firstParam,
+        #[AllowedValues(['secondAllowedString'], 1)] string $secondParam
+    ): string {
+        return $firstParam . ' ' . $secondParam;
     }
 }

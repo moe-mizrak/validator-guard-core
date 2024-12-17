@@ -6,6 +6,8 @@ use Illuminate\Support\ServiceProvider;
 
 /**
  * Service provider for ValidatorGuardCore
+ *
+ * @class ValidatorGuardCoreServiceProvider
  */
 class ValidatorGuardCoreServiceProvider extends ServiceProvider
 {
@@ -108,6 +110,7 @@ class ValidatorGuardCoreServiceProvider extends ServiceProvider
     private function loadHelpers(): void
     {
         $helperFile = __DIR__ . '/Helpers/helpers.php';
+
         if (file_exists($helperFile)) {
             require_once $helperFile;
         }

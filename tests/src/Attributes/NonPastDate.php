@@ -8,14 +8,14 @@ use MoeMizrak\ValidatorGuardCore\Data\MethodContextData;
 
 /**
  * NonPastDate attribute for checking if date parameter is passed or in the future.
+ *
+ * @attribute NonPastDate
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class NonPastDate implements ValidationAttributeInterface
 {
     /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
+     * @inheritDoc
      */
     public function handle(MethodContextData $methodContextData): bool
     {

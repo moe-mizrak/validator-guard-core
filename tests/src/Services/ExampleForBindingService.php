@@ -6,6 +6,8 @@ use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 
 /**
  * Example Service for testing binding classes in service provider.
+ *
+ * @class ExampleForBindingService
  */
 class ExampleForBindingService
 {

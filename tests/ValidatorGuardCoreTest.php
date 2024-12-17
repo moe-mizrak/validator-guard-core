@@ -240,4 +240,60 @@ class ValidatorGuardCoreTest extends TestCase
         $this->assertGreaterThan(0, filesize($filePath));
         file_put_contents($filePath, ''); // clear log file after assertion
     }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_of_failure()
+    {
+        /* SETUP */
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $validationGuardCore->allowedValuesMethod('notAllowedString', 55);
+    }
+
+    #[Test]
+    public function it_tests_allowed_values_attribute_in_case_validation_passes()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $stringValue = 'allowedString';
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+
+        /* EXECUTE */
+        $result = $validationGuardCore->allowedValuesMethod($stringValue, $intValue);
+
+        /* ASSERT */
+        $this->assertEquals($result, $intValue);
+    }
+
+    #[Test]
+    public function it_tests_multiple_allowed_values_attribute_in_case_validation_passes()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $firstStringValue = 'firstAllowedString';
+        $secondStringValue = 'secondAllowedString';
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+
+        /* EXECUTE */
+        $result = $validationGuardCore->multipleAllowedValuesMethod($firstStringValue, $secondStringValue);
+
+        /* ASSERT */
+        $this->assertEquals($result, $firstStringValue . ' ' . $secondStringValue);
+    }
+
+    #[Test]
+    public function it_tests_multiple_allowed_values_attribute_in_case_of_failure()
+    {
+        /* SETUP */
+        $intValue = 55;
+        $firstStringValue = 'firstAllowedString';
+        $secondStringValue = 'invalidString';
+        $validationGuardCore = new ValidatorGuardCore($this->example);
+        $this->expectException(ValidatorGuardCoreException::class);
+
+        /* EXECUTE */
+        $validationGuardCore->multipleAllowedValuesMethod($firstStringValue, $secondStringValue);
+    }
 }
