@@ -8,8 +8,10 @@ use ReflectionClass;
 
 /**
  * Callback attribute for making a call to given class method including parameters and comparing result.
+ *
+ * @attribute Callback
  */
-#[\Attribute(\Attribute::TARGET_PROPERTY | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
+#[\Attribute(\Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class Callback implements ValidationAttributeInterface
 {
     public function __construct(
@@ -20,10 +22,7 @@ class Callback implements ValidationAttributeInterface
     }
 
     /**
-     * @param MethodContextData $methodContextData
-     *
-     * @return bool
-     * @throws \ReflectionException
+     * @inheritDoc
      */
     public function handle(MethodContextData $methodContextData): bool
     {

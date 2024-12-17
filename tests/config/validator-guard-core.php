@@ -1,5 +1,6 @@
 <?php
 
+use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\AllowedValues;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Callback;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\NonPastDate;
@@ -14,6 +15,7 @@ return [
         'before' => [
             Callback::class,
             NonPastDate::class,
+            AllowedValues::class,
         ],
         'after' => [
             Comparison::class,

@@ -6,6 +6,8 @@ use MoeMizrak\ValidatorGuardCore\Tests\src\Attributes\Comparison;
 
 /**
  * Example Service for testing constructor parameters.
+ *
+ * @class ExampleConstructorService
  */
 class ExampleConstructorService
 {
