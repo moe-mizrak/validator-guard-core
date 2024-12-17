@@ -66,14 +66,14 @@ readonly abstract class ValidatorGuardCoreAPI
      * @throws \ReflectionException
      */
     protected function _validate(
-        array $_attributeMethodPairs,
+        array $_attributePairs,
         string $_methodName,
         MethodContextData $_methodContextData
     ): void {
         // We don't need before and after keys, we run all attribute validations in loop
-        $_flattenedMethodPairs = Arr::flatten($_attributeMethodPairs);
+        $_flattenedAttributePairs = Arr::flatten($_attributePairs);
 
-        foreach ($_flattenedMethodPairs as $_attribute) {
+        foreach ($_flattenedAttributePairs as $_attribute) {
             // Invoke the handle method of the attribute class, if fails throw/log descriptive exception
             if (! $this->_invokeHandle($_attribute, $_methodContextData)) {
                 // Message that will be thrown and/or logged
