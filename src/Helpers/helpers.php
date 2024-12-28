@@ -3,14 +3,16 @@
 use MoeMizrak\ValidatorGuardCore\ValidatorGuardCore;
 
 if (! function_exists('valguard')) {
+
     /**
      * Creates a new ValidatorGuardCore instance for the given class
      *
-     * @param object $class
+     * @template T
+     * @param T $class
      *
-     * @return ValidatorGuardCore
+     * @return ValidatorGuardCore&T
      */
-    function valguard(object $class): ValidatorGuardCore
+    function valguard($class): ValidatorGuardCore
     {
         return new ValidatorGuardCore($class);
     }
